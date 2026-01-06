@@ -12,7 +12,7 @@ source:
 build:
   noarch: python
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-  number: 0
+  number: 1
 
 requirements:
   host:
@@ -20,7 +20,7 @@ requirements:
     - hatchling
     - pip
   run:
-    - python >={{ python_min }}
+    - python >={{ python_min }},<3.14
     - pandas
     - tabulate
     - openai >=1.0.0
@@ -28,6 +28,7 @@ requirements:
     - langgraph >=0.1.2
     - python-dotenv >=1.0.0
     - vizro >=0.1.32
+    - pydantic >=2.7.0
     - langchain-openai
     - black
     - autoflake
