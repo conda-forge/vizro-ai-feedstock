@@ -22,16 +22,10 @@ requirements:
   run:
     - python >={{ python_min }},<3.14
     - pandas
-    - tabulate
-    - openai >=1.0.0
-    - langchain >=0.3.0
-    - langgraph >=0.1.2
-    - python-dotenv >=1.0.0
-    - vizro >=0.1.32
-    - pydantic >=2.7.0
-    - langchain-openai
+    - plotly
     - black
     - autoflake
+    - pydantic-ai-slim >=1.39.0
 
 test:
   imports:
