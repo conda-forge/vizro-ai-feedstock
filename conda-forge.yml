@@ -1,18 +1,31 @@
-azure:
+# toggle for storing the conda build_artifacts directory
+workflow_settings:
   store_build_artifacts: true
+
+azure:
+  force: false
+  free_disk_space: true
+  max_parallel: 15
+
 github:
   branch_name: main
   tooling_branch_name: main
+
 conda_build:
   error_overlinking: true
+
 conda_forge_output_validation: true
+
 bot:
   automerge: true
   inspection: update-grayskull
   check_solvable: true
   run_deps_from_wheel: true
+
 conda_install_tool: pixi
+
 conda_build_tool: rattler-build
+
 noarch_platforms:
   - linux_64
   - win_64
@@ -24,7 +37,9 @@ build_platform:
   linux_aarch64: linux_64
   linux_ppc64le: linux_64
   osx_arm64: osx_64
+
 provider:
   linux_ppc64le: default
   linux_aarch64: default
+
 test: native_and_emulated
