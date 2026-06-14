@@ -3,15 +3,15 @@ About vizro-ai-feedstock
 
 Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/vizro-ai-feedstock/blob/main/LICENSE.txt)
 
-Home: https://pypi.org/project/vizro-ai
+Home: https://pypi.org/project/vizro-ai/
 
 Package license: Apache-2.0
 
-Summary: Vizro-AI is a tool for generating data visualizations
+Summary: Vizro-AI provides pre-configured agents that help with data visualizations
 
 Development: https://github.com/mckinsey/vizro
 
-Documentation: https://vizro.readthedocs.io/en/stable
+Documentation: https://vizro.readthedocs.io/en/stable/
 
 Current build status
 ====================
@@ -20,7 +20,9 @@ Current build status
 <table><tr>
     <td>All platforms:</td>
     <td>
-      <img src="https://img.shields.io/badge/noarch-disabled-lightgrey.svg" alt="noarch disabled">
+      <a href="https://github.com/conda-forge/vizro-ai-feedstock/actions/workflows/conda-build.yml">
+        <img src="https://github.com/conda-forge/vizro-ai-feedstock/actions/workflows/conda-build.yml/badge.svg?event=push&branch=main">
+      </a>
     </td>
   </tr>
 </table>
