@@ -1,6 +1,91 @@
+# ----------------------------------------------------------------------------
+# Build-artifact retention
+# ----------------------------------------------------------------------------
+# Saves the built .conda files as downloadable Azure Pipeline artifacts so
+# reviewers can grab them without rebuilding. Default is false; opt in
+# because PR reviewers may want to smoke-test the artifact directly.
+workflow_settings:
+  store_build_artifacts: true
+
+# ----------------------------------------------------------------------------
+# Azure agent behavior (kept by conda-smithy rerender)
+# ----------------------------------------------------------------------------
+azure:
+  force: false
+  free_disk_space: true
+  max_parallel: 15
+
 github:
   branch_name: main
   tooling_branch_name: main
+
 conda_build:
   error_overlinking: true
+
 conda_forge_output_validation: true
+
+# ----------------------------------------------------------------------------
+# Autotick / regro-cf-autotick-bot behavior
+# ----------------------------------------------------------------------------
+bot:
+  automerge: true
+  inspection: update-grayskull
+  check_solvable: true
+  run_deps_from_wheel: true
+
+conda_install_tool: pixi
+conda_build_tool: rattler-build
+
+# ----------------------------------------------------------------------------
+# REMOVED — `noarch_platforms`, `build_platform`, `provider`, `test`
+# ----------------------------------------------------------------------------
+# These four keys interact and almost always change together (the
+# "four-key matrix"). All four were deleted because `vizro-ai` is a
+# pure-Python `noarch: python` package: ONE platform-independent `.conda`
+# is produced regardless of where it is built, and the package has no
+# platform-conditional runtime behavior (no `sys.platform` branches, no
+# `subprocess` to a native shell, no hard-coded path separators). The
+# defaults (= test only on linux_64) are correct.
+#
+# Adding any of these back costs CI minutes and adds flake surface (the
+# Azure Windows pool in particular drops connections with bare
+# `Cmd.exe exited with code '1'` errors that have nothing to do with the
+# recipe). Re-enable ONLY for the reasons below.
+#
+#   noarch_platforms: [linux_64, win_64, osx_64, ...]
+#     KEEP DELETED unless the package has TRUE platform-conditional
+#     runtime behavior — i.e. code branches on `sys.platform`/`os.name`,
+#     calls `subprocess` against a shell command whose syntax differs
+#     per-OS, hard-codes a path separator, or behaves differently on
+#     Windows vs. Linux at install or import time. A pure-Python library
+#     that just does data viz / ML / API calls does NOT qualify.
+#     Default is `[linux_64]` for noarch packages — generates one
+#     test leg. This key only adds TEST coverage; the artifact stays
+#     identical regardless of which platforms are listed.
+#     Also required (>=2 entries) to silence conda-smithy lint R1-002
+#     (`lint_noarch_selectors`) when `requirements.run:` carries an
+#     `if: <platform> / then:` selector.
+#
+#   build_platform: { linux_aarch64: linux_64, ... }
+#     Only meaningful alongside `noarch_platforms` (or a compiled recipe
+#     with multiple target subdirs). Tells the smithy "run the
+#     linux_aarch64 test leg on a linux_64 host with qemu". With
+#     `noarch_platforms` removed there is nothing to route. Delete.
+#
+#   provider: { linux_ppc64le: default, ... }
+#     Activates CI for non-default subdirs (`default` = Azure;
+#     `github_actions` = GHA opt-in; `azure` = pin to Azure). With no
+#     extra subdirs in the matrix (because `noarch_platforms` is gone),
+#     there is nothing to activate. Keep deleted.
+#
+#   test: native_and_emulated
+#     Tells the smithy whether to run tests on the native host, the
+#     emulated targets, or both (the slow qemu legs). Only meaningful
+#     when at least one platform in the matrix is emulated. With a
+#     default `[linux_64]`-only noarch matrix there is no emulated leg,
+#     so this key is a no-op. Delete.
+#
+# Bottom line: a `noarch: python` recipe with no platform-conditional
+# runtime behavior should ship NONE of these four keys. Conda-smithy
+# rerender generates the right single linux_64 test leg automatically.
+# ----------------------------------------------------------------------------
