@@ -2,7 +2,7 @@
 schema_version: 1
 
 context:
-  version: 0.4.1
+  version: "0.4.2"
 
 package:
   name: vizro-ai
@@ -10,7 +10,7 @@ package:
 
 source:
   url: https://pypi.org/packages/source/v/vizro-ai/vizro_ai-${{ version }}.tar.gz
-  sha256: ab948753d7d9485f07670b665d0f4bc007492b3aae54e6d5bde14db7988b4271
+  sha256: 2da6252aab5d2e9dd7cb190a13ca389fd950153a13164928fb130bd6e27216b6
 
 build:
   number: 0
